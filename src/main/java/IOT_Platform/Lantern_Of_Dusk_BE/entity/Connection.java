@@ -18,6 +18,4 @@ public class Connection {
     @Id
     private int id;
     private String applicationEntity;
-
-
 }
