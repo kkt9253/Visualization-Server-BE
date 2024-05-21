@@ -1,5 +1,6 @@
 package IOT_Platform.Lantern_Of_Dusk_BE.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -17,5 +18,6 @@ public class Connection {
 
     @Id
     private int id;
+    private String name;
     private String applicationEntity;
 }
