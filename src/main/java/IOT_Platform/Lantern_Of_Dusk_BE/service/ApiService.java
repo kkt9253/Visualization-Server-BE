@@ -29,6 +29,10 @@ public class ApiService {
         return connectionRepository.findById(id).orElse(null);
     }
 
+    public Connection findByAe(String ae) {
+        return connectionRepository.findByApplicationEntity(ae).orElse(null);
+    }
+
     public List<Connection> findAll() {
         return connectionRepository.findAll();
     }
