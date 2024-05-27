@@ -1,6 +1,7 @@
 package IOT_Platform.Lantern_Of_Dusk_BE.controller;
 
 import IOT_Platform.Lantern_Of_Dusk_BE.entity.Connection;
+import IOT_Platform.Lantern_Of_Dusk_BE.entity.Position;
 import IOT_Platform.Lantern_Of_Dusk_BE.service.ApiService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,21 +13,20 @@ import java.util.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/device")
+@RequestMapping("/api")
 public class ApiController {
 
     private final ApiService apiService;
 
-    // GET /api/device/connection/list ⇒ 모든 연결 정보 / X
+    // GET /api/connection/list ⇒ 모든 연결 정보 / X
     @GetMapping("/connection/list")
     public List<Connection> getConnectionAll() {
         return apiService.findAll();
     }
 
-    // GET /api/device/connection/:id ⇒ 특정 아이디의 연결 정보 / (int id)
+    // GET /api/connection/:id ⇒ 특정 아이디의 연결 정보 / (int id)
     @GetMapping("/connection/{id}")
     public ResponseEntity<Connection> getConnection(@PathVariable int id) {
-
         try {
             Connection connection = apiService.findById(id);
             if (connection != null) {
@@ -39,21 +39,20 @@ public class ApiController {
         }
     }
 
-    // POST /api/device/connection ⇒ 연결 정보 생성 json / {id, applicationEntity}
+    // POST /api/connection ⇒ 연결 정보 생성 / json {id, name, applicationEntity}
     @PostMapping("/connection")
     public ResponseEntity<Connection> postConnection(@RequestBody Connection connectionContext) {
-
         try {
-            if (apiService.findById(connectionContext.getId()) == null) {
+            if (apiService.findByAe(connectionContext.getApplicationEntity()) == null) {
                 apiService.save(connectionContext);
-                return new ResponseEntity<>(apiService.findById(connectionContext.getId()), HttpStatus.CREATED);
+                return new ResponseEntity<>(apiService.findByAe(connectionContext.getApplicationEntity()), HttpStatus.CREATED);
             } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    // PUT /api/device/connection/{id} ⇒ 연결 정보 업데이트 / (int id), json {id, applicationEntity}
+    // PUT /api/connection/{id} ⇒ 연결 정보 업데이트 / (int id), json {id, name, applicationEntity}
     @PutMapping("/connection/{id}")
     public ResponseEntity<Connection> updateConnection(@PathVariable int id, @RequestBody Connection updatedConnection) {
 
@@ -61,6 +60,7 @@ public class ApiController {
             if (apiService.findById(id) != null) {
                 Connection pastConnection = apiService.findById(id);
                 pastConnection.setId(updatedConnection.getId());
+                pastConnection.setName(updatedConnection.getName());
                 pastConnection.setApplicationEntity(updatedConnection.getApplicationEntity());
                 apiService.save(pastConnection);
                 return new ResponseEntity<>(apiService.findById(id), HttpStatus.OK);
@@ -72,7 +72,7 @@ public class ApiController {
         }
     }
 
-    // DELETE /api/device/connection/:id ⇒ 연결 정보 삭제 / (int id)
+    // DELETE /api/connection/:id ⇒ 연결 정보 삭제 / (int id)
     @DeleteMapping("/connection/{id}")
     public ResponseEntity<String> deleteConnection(@PathVariable int id) {
 
@@ -88,23 +88,25 @@ public class ApiController {
         }
     }
 
-    // DELETE /api/device/connection/:id ⇒ 연결 정보 삭제 / (int id)
+    // DELETE /api/connection ⇒ 연결 정보 삭제
     @DeleteMapping("/connection")
     public ResponseEntity<String> deleteAllConnection() {
 
         apiService.deleteAll();
-        return new ResponseEntity<>("전체 ae가 삭제되었습니다.", HttpStatus.OK);
+        return new ResponseEntity<>("전체 connection-ae가 삭제되었습니다.", HttpStatus.OK);
     }
 
-    // test API
-    @GetMapping("/position/test")
-    public Map<String, Object> getTestPosition() {
-        Random random = new Random();
-        Map<String, Object> response = new HashMap<>();
-        response.put("x", -100 + (200 * random.nextDouble()));
-        response.put("y", -100 + (200 * random.nextDouble()));
-        response.put("z", -100 + (200 * random.nextDouble()));
-        response.put("timestamp", LocalDateTime.now());
-        return response;
+    // GET /api/position/:deviceId ⇒ deviceId 위치정보 / (int deviceId)
+    @GetMapping("/position/{deviceId}")
+    public ResponseEntity<Position> getPositionByDeviceId(@PathVariable int deviceId) {
+
+        try {
+            if (apiService.findById(deviceId) != null && apiService.getApplicationEntityByDeviceId(deviceId) != null) {
+                Position position = apiService.getApplicationEntityByDeviceId(deviceId);
+                return new ResponseEntity<>(position, HttpStatus.OK);
+            } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
