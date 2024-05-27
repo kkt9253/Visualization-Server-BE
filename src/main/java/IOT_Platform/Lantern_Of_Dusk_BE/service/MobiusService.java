@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+
 import IOT_Platform.Lantern_Of_Dusk_BE.entity.Connection;
 import IOT_Platform.Lantern_Of_Dusk_BE.repository.ConnectionRepository;
 
@@ -41,17 +43,17 @@ public class MobiusService {
      */
     public String fetchDataFromMobiusForAE(String ae) {
         // Connection 테이블에서 AE에 대한 정보를 가져옵니다.
-        Connection connection = connectionRepository.findByApplicationEntity(ae);
+        Optional<Connection> connection = connectionRepository.findByApplicationEntity(ae);
 
         // Connection 정보가 없는 경우 예외 처리
-        if (connection == null) {
+        if (connection.isEmpty()) {
             throw new IllegalArgumentException("Connection not found for AE: " + ae);
         }
 
         // 각 센서에 대한 데이터를 가져옵니다.
-        String accelerationData = fetchDataForSensor(connection, "ACCEL");
-        String gyroscopeData = fetchDataForSensor(connection, "GYRO");
-        String pressureData = fetchDataForSensor(connection, "PRESSURE");
+        String accelerationData = fetchDataForSensor(connection.orElse(null), "ACCEL");
+        String gyroscopeData = fetchDataForSensor(connection.orElse(null), "GYRO");
+        String pressureData = fetchDataForSensor(connection.orElse(null), "PRESSURE");
 
         // 데이터 조합
         String combinedData = "ACCEL: " + accelerationData + "\n" +
