@@ -54,12 +54,11 @@ public class MobiusService {
         String pressureData = fetchDataForSensor(connection, "PRESSURE");
 
         // 데이터 조합
-        StringBuilder combinedData = new StringBuilder();
-        combinedData.append("ACCEL: ").append(accelerationData).append("\n");
-        combinedData.append("GYRO: ").append(gyroscopeData).append("\n");
-        combinedData.append("PRESSURE: ").append(pressureData);
+        String combinedData = "ACCEL: " + accelerationData + "\n" +
+                "GYRO: " + gyroscopeData + "\n" +
+                "PRESSURE: " + pressureData;
 
-        return combinedData.toString();
+        return combinedData;
     }
 
 
