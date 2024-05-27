@@ -1,11 +1,7 @@
 package IOT_Platform.Lantern_Of_Dusk_BE.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
 
 @Getter
 @Setter
@@ -17,6 +13,11 @@ public class Connection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Getter
     private String name;
+
     private String applicationEntity;
+
+
 }

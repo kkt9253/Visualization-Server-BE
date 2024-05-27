@@ -3,7 +3,6 @@ package IOT_Platform.Lantern_Of_Dusk_BE.service;
 import IOT_Platform.Lantern_Of_Dusk_BE.entity.Connection;
 import IOT_Platform.Lantern_Of_Dusk_BE.entity.Data;
 import IOT_Platform.Lantern_Of_Dusk_BE.repository.ConnectionRepository;
-import IOT_Platform.Lantern_Of_Dusk_BE.service.MobiusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -15,12 +14,14 @@ public class DataService {
 
     private final MobiusService mobiusService;
     private final ConnectionRepository connectionRepository;
+    private final FilterService filterService;
     private final Map<String, List<Data>> dataArrays;
 
     @Autowired
-    public DataService(MobiusService mobiusService, ConnectionRepository connectionRepository) {
+    public DataService(MobiusService mobiusService, ConnectionRepository connectionRepository, FilterService filterService) {
         this.mobiusService = mobiusService;
         this.connectionRepository = connectionRepository;
+        this.filterService = filterService;
         this.dataArrays = new HashMap<>();
     }
 
@@ -51,6 +52,11 @@ public class DataService {
                 // 1초 동안의 데이터(약 143개)를 초과하면 앞의 데이터를 제거
                 if (dataArray.size() > 143) {
                     dataArray.remove(0);
+                }
+
+                // 데이터 배열이 143개가 되면 필터링 수행
+                if (dataArray.size() == 143) {
+                    filterService.applyFilter(new ArrayList<>(dataArray), Integer.parseInt(connection.getName()));
                 }
             } catch (Exception e) {
                 // 에러 처리

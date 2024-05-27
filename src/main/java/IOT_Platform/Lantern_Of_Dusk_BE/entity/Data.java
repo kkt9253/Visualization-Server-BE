@@ -54,4 +54,18 @@ public class Data {
             throw new RuntimeException("Failed to parse JSON data", e);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Data{" +
+                "id=" + id +
+                ", x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", pitch=" + pitch +
+                ", yaw=" + yaw +
+                ", roll=" + roll +
+                ", pressure=" + pressure +
+                '}';
+    }
 }
