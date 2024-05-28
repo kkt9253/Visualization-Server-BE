@@ -9,7 +9,7 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-// http://localhost:8080/swagger-ui/index.html 로 접속하여 API 명세를 받아볼 수 있다.
+// http://localhost:7777/swagger-ui/index.html 로 접속하여 API 명세를 받아볼 수 있다.
 
 @OpenAPIDefinition(
         info =@Info(
