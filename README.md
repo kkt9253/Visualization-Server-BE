@@ -1,8 +1,15 @@
 # IMU 센서 기반 상대위치 측정을 통한 소방 지휘 보조 시스템
 2024_IOT플랫폼_팀프로젝트
+## Stack
+Spring Boot<br/>
+Spring Data JPA<br/>
+MariaDB<br/>
+Lombok<br/>
+Swagger
 
-팀 깃허브: https://github.com/LanternOfDusk
-
+## 팀 깃허브
+https://github.com/LanternOfDusk
+<br/>
 ### 기획의도
 화재현장에서 소방관들의 효율적인 구조동선 및 지휘의 편의 개선을 위해 기획함.
 
