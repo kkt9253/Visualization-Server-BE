@@ -1,5 +1,5 @@
 # IMU 센서 기반 상대위치 측정을 통한 소방 지휘 보조 시스템
-2024_IOT플랫폼_팀프로젝트
+2024_IoT플랫폼_팀프로젝트
 ## Stack
 Spring Boot<br/>
 Spring Data JPA<br/>
